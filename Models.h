@@ -58,7 +58,7 @@ public:
     void Search();
     void SearchbyStudentNumber(string no);
     void SearchbyStudentLastName(string LastName);
-    void DeletStudent();
+    void DeleteStudent();
     void DeleteLesson();
     void DeleteLessonByStudent(Student* student,string code);
     void FindingLessonIntersection();

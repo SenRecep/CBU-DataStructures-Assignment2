@@ -4,18 +4,18 @@
 #include "Models.h"
 
 Lesson::Lesson() {}
-Lesson::Lesson(Lesson *lesson)
+Lesson::Lesson(Lesson *lesson) //var olan bir dersin ozelliklerini kopyalayarak yeni bir ders olusturur
 {
     this->Code = lesson->Code;
     this->Name = lesson->Name;
 }
 
-void Lesson::Print()
+void Lesson::Print() //ekrana dersin ozelliklerini yazar
 {
     cout << "[" << this->Code << " " << this->Name << "] ";
 }
 
-void Student::Print()
+void Student::Print() //ekrana ogrencinin ozelliklerini yazar
 {
     cout << this->No << " " << this->FirstName << " " << this->LastName << " ";
     Lesson *lesson = this->LessonRootNode;
@@ -27,12 +27,12 @@ void Student::Print()
     cout << endl;
 }
 
-void Lesson::PrintFile(string &str)
+void Lesson::PrintFile(string &str) //dosyaya yazmak icin dersin bilgilerini str degiskenine ekler
 {
     str += "[" + this->Code + " " + this->Name + "] ";
 }
 
-string Student::PrintFile()
+string Student::PrintFile() //dosyaya yazmak icin ogrencinin bilgilerini str degiskenine ekler
 {
     string str = "";
     str += this->No + " " + this->FirstName + " " + this->LastName + " ";
@@ -46,7 +46,7 @@ string Student::PrintFile()
     return str;
 }
 
-Student::~Student()
+Student::~Student() //ogrenci bellekten silinirken ders bilgileride silinir
 {
     Lesson *current = this->LessonRootNode, *next = nullptr;
     while (current)
@@ -57,7 +57,7 @@ Student::~Student()
     }
 }
 
-MultipleList::~MultipleList()
+MultipleList::~MultipleList() //liste bellekten silinirken ogrenci bilgileride silinir
 {
     Student *current = this->rootNode, *next = nullptr;
     while (current)
@@ -68,13 +68,13 @@ MultipleList::~MultipleList()
     }
 }
 
-void MultipleList::Init()
+void MultipleList::Init() //listeye dosyalardan gelen veriler eklenir
 {
     for (auto fileName : this->fileNames)
         ReadFile("./data/" + fileName);
 }
 
-void MultipleList::ReadFile(string fileName)
+void MultipleList::ReadFile(string fileName) //dosyadan gelen verileri listeye ekler
 {
     string line;
     ifstream file(fileName);
@@ -96,7 +96,7 @@ void MultipleList::ReadFile(string fileName)
         cout << "Dosya okunamadı";
 }
 
-void MultipleList::List()
+void MultipleList::List() //ogrencileri listeler
 {
     Student *student = this->rootNode;
     while (student)
@@ -106,7 +106,7 @@ void MultipleList::List()
     }
 }
 
-void MultipleList::AddLesson(Student *student, Lesson *lesson)
+void MultipleList::AddLesson(Student *student, Lesson *lesson) //ogrenciye ders ekler
 {
     Lesson *search = nullptr, *found = nullptr;
     if (!student->LessonRootNode) //ilk ders yok mu
@@ -141,7 +141,7 @@ void MultipleList::AddLesson(Student *student, Lesson *lesson)
     }
 }
 
-void MultipleList::AddStudent(Student *student, Lesson *lesson)
+void MultipleList::AddStudent(Student *student, Lesson *lesson) //ogrenci ekler
 {
     Student *search = nullptr, *found = nullptr;
     if (!this->rootNode) //ilk ogrenci yok mu
@@ -167,8 +167,9 @@ void MultipleList::AddStudent(Student *student, Lesson *lesson)
         else
             search = search->Next;
     if (found)
-        this->AddLesson(found, lesson); //ogrencinin dersini ekleme
-    else                                //var olan bir ogrenci degil isen yeni ogrenciyi listenin sonuna ekle
+        this->AddLesson(found, lesson); //var olan ogrenciye yeni ders ekleme
+    //var olan bir ogrenci degil isen yeni ogrenciyi listenin sonuna ekle
+    else
     {
         search = this->rootNode;
         while (search->Next) //listenin sonuncu elemanini buldurma
@@ -178,7 +179,7 @@ void MultipleList::AddStudent(Student *student, Lesson *lesson)
     }
 }
 
-void MultipleList::Search()
+void MultipleList::Search()//ogrenci arama yapmak icin kullanilir, iki tip arama secenegi sunar
 {
     SearchType type;
     string typeInput, s;
@@ -208,7 +209,7 @@ void MultipleList::Search()
     }
 }
 
-void MultipleList::SearchbyStudentNumber(string no)
+void MultipleList::SearchbyStudentNumber(string no)//ogrenci numarasina gore arama yapar
 {
     cout << no << " Ogrenci numarasi icin arama sonuclari:" << endl;
     Student *search = nullptr, *found = nullptr;
@@ -227,7 +228,7 @@ void MultipleList::SearchbyStudentNumber(string no)
         cout << "Istenilen ozelliklerde ogrenci bulunamadi" << endl;
 }
 
-void MultipleList::SearchbyStudentLastName(string lastName)
+void MultipleList::SearchbyStudentLastName(string lastName)//ogrenci soyadina gore arama yapar
 {
     cout << lastName << " Ogrenci soyadi icin arama sonuclari:" << endl;
     Student *search = nullptr;
@@ -247,7 +248,7 @@ void MultipleList::SearchbyStudentLastName(string lastName)
         cout << "Istenilen ozelliklerde ogrenci bulunamadi" << endl;
 }
 
-void MultipleList::DeletStudent()
+void MultipleList::DeleteStudent()//ogrenci numarasina gore ogrenci sildirmek icin kullanilir
 {
     string no;
     cout << "Silmek istediginiz ogrenci numarasini giriniz:";
@@ -276,11 +277,11 @@ void MultipleList::DeletStudent()
         }
 
         before = search;
-        search = search->Next;
+        search = before->Next;
     }
 }
 
-void MultipleList::DeleteLessonByStudent(Student *student, string code)
+void MultipleList::DeleteLessonByStudent(Student *student, string code)//ogrencinin dersini ders koduna gore sildirmek icin kullanilir
 {
     Lesson *before = nullptr, *search = nullptr, *temp = nullptr;
     if (student->LessonRootNode->Code == code)
@@ -304,11 +305,11 @@ void MultipleList::DeleteLessonByStudent(Student *student, string code)
         }
 
         before = search;
-        search = search->Next;
+        search = before->Next;
     }
 }
 
-void MultipleList::DeleteLesson()
+void MultipleList::DeleteLesson()//ders sildirmek icin kullanilir, ogenci no ve ders kodunu kullanicidan ister
 {
     string no, code;
     cout << "Ogrenci numarasini giriniz:";
@@ -331,7 +332,7 @@ void MultipleList::DeleteLesson()
         this->DeleteLessonByStudent(found, code);
 }
 
-void MultipleList::FindingLessonIntersection()
+void MultipleList::FindingLessonIntersection()//iki ders koduna gore o dersi ortak alan ogrenclileri ogrencileri listeler
 {
     string left, right;
     cout << "Birinci ders kodunu giriniz: ";
@@ -359,7 +360,7 @@ void MultipleList::FindingLessonIntersection()
     }
 }
 
-void MultipleList::PrintFile()
+void MultipleList::PrintFile()//ogrenci listesini output.txt dosyasina yazar
 {
     ofstream file;
     file.open("./data/output.txt");
@@ -377,7 +378,7 @@ void MultipleList::PrintFile()
         cout << "dosya olusturulamadi" << endl;
 }
 
-void MultipleList::Menu()
+void MultipleList::Menu()//sistem kapatilmadigi muddetce acik kalan bir menu calistirir
 {
     while (true)
     {
@@ -411,7 +412,7 @@ void MultipleList::Menu()
             this->List();
             break;
         case DeleteStudentOption:
-            this->DeletStudent();
+            this->DeleteStudent();
             cout << "Ogrenci basari ile silindi" << endl;
             break;
         case WriteToFileOption:
@@ -429,7 +430,7 @@ void MultipleList::Menu()
     }
 }
 
-Option MultipleList::MenuSelection(string option)
+Option MultipleList::MenuSelection(string option)// menu secimlerini enum hale cevirir
 {
     if (option == "A" || option == "a")
         return SearchOption;

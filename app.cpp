@@ -1,13 +1,9 @@
-#include <iostream>
-#include <fstream>
 #include "Models.h"
-using namespace std;
-
 int main()
 {
-    MultipleList *list = new MultipleList();
-    list->Init();
-    list->Menu();
-    delete list;
-    return 0;
+    MultipleList *list = new MultipleList();//liste olusturulur
+    list->Init();//liste kurulur
+    list->Menu();//menu calistirilir
+    delete list;//liste temizlenir
+    return 0;//program sonlandirilir
 }
