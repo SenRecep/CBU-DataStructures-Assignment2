@@ -1,0 +1,3 @@
+g++ -c app.cpp Models.cpp
+g++ -o app.exe app.o Models.o
+./app.exe
